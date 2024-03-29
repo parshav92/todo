@@ -1,0 +1,24 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@passwordless-id/webauthn": "^1.5.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.19.2",
+    "joi": "^17.12.2",
+    "mongoose": "^8.2.3",
+    "nodemon": "^3.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
