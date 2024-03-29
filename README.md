@@ -1,2 +1,2 @@
 hi,
-this is a tp (practice) tod-list project
+this is a tp (practice) todo-list project
