@@ -2,7 +2,7 @@ import React from "react";
 
 const ThemeSwitcher = () => {
   return (
-    <div className="dropdown mb-72 dropdown-hover">
+    <div className="dropdown mb-48 dropdown-hover">
       <div tabIndex={0} role="button" className="btn m-1">
         Theme
         <svg
@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
       </div>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
+        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-32"
       >
         <li>
           <input

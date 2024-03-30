@@ -4,16 +4,23 @@ const TodoForm = () => {
   return (
     <div className="container mx-auto">
       <h1 className="text-center align-middle text-2xl font-bold">Todo List</h1>
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input w-full max-w-xs"
-        />
-        <input type="date" className="input w-full max-w-xs" />
-
-        <textarea className="textarea " placeholder="Description"></textarea>
-        <button className="btn btn-circle btn-secondary">+</button>
+      <form>
+        <div className="flex flex-col md:flex-row gap-4 my-4">
+          <input
+            type="text"
+            placeholder="Type here"
+            className="input input-md input-bordered w-full max-w-xs"
+          />
+          <input
+            type="date"
+            className="input input-bordered input-md w-full max-w-xs"
+          />
+          <button className="btn btn-circle btn-secondary btn-s">+</button>
+        </div>
+        <textarea
+          className="textarea w-full textarea-bordered textarea-md  "
+          placeholder="Description"
+        ></textarea>
       </form>
     </div>
   );

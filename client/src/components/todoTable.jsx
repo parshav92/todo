@@ -1,39 +1,26 @@
 import React from "react";
+import Actions from "./actions";
 
 const TodoTable = () => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
+    <div className="rounded overflow-x-auto">
+      <table className="table flex">
         {/* head */}
         <thead>
           <tr className="bg-base-200 skeleton">
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th>TASK</th>
+            <th>DUE DATE</th>
+            <th>STATUS</th>
+            <th>ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           {/* row 1 */}
           <tr>
-            <th>1</th>
-            <td>Cy Ganderton</td>
-            <td>Quality Control Specialist</td>
-            <td>Blue</td>
-          </tr>
-          {/* row 2 */}
-          <tr>
-            <th>2</th>
-            <td>Hart Hagerty</td>
-            <td>Desktop Support Technician</td>
-            <td>Purple</td>
-          </tr>
-          {/* row 3 */}
-          <tr>
-            <th>3</th>
-            <td>Brice Swyre</td>
-            <td>Tax Accountant</td>
-            <td>Red</td>
+            <th>task 1</th>
+            <td>pending</td>
+            <td>28-4-1222</td>
+            <Actions />
           </tr>
         </tbody>
       </table>

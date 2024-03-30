@@ -7,16 +7,17 @@ import Alerts from "./components/common/alerts";
 
 function App() {
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-opacity-15 backdrop-blur-md ">
-        <div className=" bg-opacity-15 shadow-lg backdrop-blur-md rounded-lg p-8 min-w-1/2 min-h-1/2">
-          {/* <Alerts /> */}
-          <TodoForm />
-          <TodoTable />
-          <Pagination />
-        </div>
+    <div className="font-sans min-h-screen flex flex-col items-center justify-center bg-opacity-15 backdrop-blur-md mx-4">
+      <div
+        className="bg-opacity-50 rounded-lg p-8 w-full max-w-lg"
+        style={{ boxShadow: "0 0 16px 0 rgba(31, 38, 135, 0.3)" }}
+      >
+        {/* <Alerts /> */}
+        <TodoForm />
+        <TodoTable />
+        <Pagination />
       </div>
-      <div className="fixed top-4 right-4">
+      <div className="absolute top-4 right-4">
         {/* <p className="text-center text-sm text-gray-500">
           Made with ❤️ by{" "}
           <a href="  " className="text-blue-500 hover:underline">
@@ -26,7 +27,7 @@ function App() {
         </p> */}
         <ThemeSwitcher />
       </div>
-    </>
+    </div>
   );
 }
 
