@@ -5,16 +5,16 @@ const Actions = () => {
     <td className="flex flex-row">
       <button className="btn btn-xs btn-warning m-1">
         <svg
-          class="h-4 w-4 text-slate-600"
+          className="h-4 w-4 text-slate-600"
           width="24"
           height="24"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           {" "}
           <path d="M12 20h9" />{" "}
@@ -23,15 +23,15 @@ const Actions = () => {
       </button>
       <button className="btn btn-xs btn-success m-1">
         <svg
-          class="h-4 w-4 text-slate-600"
+          className="h-4 w-4 text-slate-600"
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="2"
+          strokeWidth="2"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           {" "}
           <path stroke="none" d="M0 0h24v24H0z" /> <path d="M5 12l5 5l10 -10" />
@@ -39,15 +39,15 @@ const Actions = () => {
       </button>
       <button className="btn btn-xs btn-error m-1">
         <svg
-          class="h-4 w-4 text-slate-600"
+          className="h-4 w-4 text-slate-600"
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="2"
+          strokeWidth="2"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           {" "}
           <path stroke="none" d="M0 0h24v24H0z" />{" "}
