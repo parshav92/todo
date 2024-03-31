@@ -2,8 +2,7 @@ import React from "react";
 import TodoForm from "./components/todoForm";
 import ThemeSwitcher from "./components/ThemeSwitcher";
 import TodoTable from "./components/todoTable";
-import Pagination from "./components/common/pagination";
-import Alerts from "./components/common/alerts";
+import { Footer } from "./components/footer";
 
 function App() {
   return (
@@ -16,15 +15,9 @@ function App() {
         <TodoTable />
       </div>
       <div className="absolute top-4 right-4">
-        {/* <p className="text-center text-sm text-gray-500">
-          Made with ❤️ by{" "}
-          <a href="  " className="text-blue-500 hover:underline">
-            {" "}
-            <strong>Codecademy</strong>
-          </a>
-        </p> */}
         <ThemeSwitcher />
       </div>
+      <Footer />
     </div>
   );
 }

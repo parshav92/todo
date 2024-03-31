@@ -18,6 +18,12 @@ const TodoTable = () => {
   const currentItems = sampleTodos.slice(indexOdFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleDelete = async (id) => {
+    // await deleteTodo()
+  };
+
+  const handleUpdate = async (id) => {};
   return (
     <div className="rounded overflow-x-auto text-sm">
       <table className="table flex ">
@@ -31,13 +37,16 @@ const TodoTable = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item, index) => (
-            <tr key={index}>
+          {currentItems.map((item) => (
+            <tr key={item.id}>
               <td>{item.task}</td>
               <td>{item.dueDate}</td>
               <td>{item.status}</td>
               <td>
-                <Actions />
+                <Actions
+                  onDelete={() => handleDelete(item.id)}
+                  onUpdate={(updatedTodo) => handleUpdate(item.id, updatedTodo)}
+                />
               </td>
             </tr>
           ))}

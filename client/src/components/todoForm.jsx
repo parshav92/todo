@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Joi from "joi";
+import { createTodo } from "../services/todoService";
 
 const TodoForm = () => {
   const [todo, setTodo] = useState({
@@ -90,7 +91,7 @@ const TodoForm = () => {
             name="date"
             value={todo.date}
             onChange={handleChange}
-            className="input input-bordered input-md w-full max-w-xs"
+            className="input input-bordered input-md w-full max-w-xs text-slate-400"
           />
           <button type="submit" className="btn btn-circle btn-secondary btn-s">
             +
@@ -100,7 +101,7 @@ const TodoForm = () => {
           name="description"
           value={todo.description}
           onChange={handleChange}
-          className="textarea w-full textarea-bordered textarea-md"
+          className="textarea w-full textarea-bordered textarea-sm"
           placeholder="Description"
         ></textarea>
       </form>
