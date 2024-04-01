@@ -11,10 +11,10 @@ exports.getTodos = async (req, res) => {
 };
 
 exports.createTodo = async (req, res) => {
-  const { todo, description, dueDate } = req.body;
+  const { title, description, dueDate } = req.body;
 
   const { error } = await validateTodo({
-    todo,
+    title,
     description,
     dueDate,
   });
@@ -24,7 +24,7 @@ exports.createTodo = async (req, res) => {
   }
   try {
     const newTodo = new Todo({
-      todo,
+      title,
       description,
       dueDate,
     });
@@ -37,12 +37,12 @@ exports.createTodo = async (req, res) => {
 };
 
 exports.patchTodo = async (req, res) => {
-  const { todo, description, dueDate, completed } = req.body;
+  const { title, description, dueDate, completed } = req.body;
   const { id } = req.params;
   try {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
-      { todo, description, dueDate, completed },
+      { title, description, dueDate, completed },
 
       { new: true, useFindAndModify: false }
     );

@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Actions from "./actions";
 import Pagination from "./common/pagination";
+import { getTodos } from "../services/todoService";
+import { toast } from "react-toastify";
 
 const TodoTable = () => {
-  const sampleTodos = [
-    { task: "task 1", status: "pending", dueDate: "28-4-1222" },
-    { task: "task 2", status: "completed", dueDate: "30-4-1222" },
-    { task: "task 3", status: "pending", dueDate: "1-5-1222" },
-    { task: "task 4", status: "pending", dueDate: "1-3-3342" },
-  ];
-
   const itemsPerPage = 3;
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sampleTodos, setSampleTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const todos = await getTodos();
+        setSampleTodos(todos);
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOdFirstItem = indexOfLastItem - itemsPerPage;
@@ -24,10 +32,10 @@ const TodoTable = () => {
   };
 
   const handleUpdate = async (id) => {};
+
   return (
     <div className="rounded overflow-x-auto text-sm">
-      <table className="table flex ">
-        {/* head */}
+      <table className="table flex">
         <thead>
           <tr className="bg-base-200 skeleton">
             <th>TASK</th>
@@ -37,19 +45,30 @@ const TodoTable = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id}>
-              <td>{item.task}</td>
-              <td>{item.dueDate}</td>
-              <td>{item.status}</td>
-              <td>
-                <Actions
-                  onDelete={() => handleDelete(item.id)}
-                  onUpdate={(updatedTodo) => handleUpdate(item.id, updatedTodo)}
-                />
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center">
+                No tasks found
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item) => (
+              <tr key={item._id}>
+                <td>{item.title}</td>
+                <td>{item.dueDate}</td>
+                <td>{item.completed ? "Completed" : "Pending"}</td>
+
+                <td>
+                  <Actions
+                    onDelete={() => handleDelete(item._id)}
+                    onUpdate={(updatedTodo) =>
+                      handleUpdate(item._id, updatedTodo)
+                    }
+                  />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <Pagination

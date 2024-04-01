@@ -5,8 +5,8 @@ import { createTodo } from "../services/todoService";
 const TodoForm = () => {
   const [todo, setTodo] = useState({
     title: "",
-    date: "",
     description: "",
+    dueDate: "",
   });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
@@ -21,7 +21,7 @@ const TodoForm = () => {
 
   const schema = Joi.object({
     title: Joi.string().required().label("Title"),
-    date: Joi.date().iso().required().label("Date"),
+    dueDate: Joi.date().iso().required().label("Date"),
     description: Joi.string().allow("").label("Description"),
   });
 
@@ -42,11 +42,12 @@ const TodoForm = () => {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // const response = await axios.post("http://localhost:8080/todos", todo);
+        const response = await createTodo(todo);
+
         console.log(todo);
         setSuccessMessage("Your Todo has been created");
         setTimeout(() => {
@@ -54,7 +55,7 @@ const TodoForm = () => {
         }, 2000);
         setTodo({
           title: "",
-          date: "",
+          dueDate: "",
           description: "",
         });
       } catch (err) {
@@ -72,7 +73,7 @@ const TodoForm = () => {
             <span>{successMessage}</span>
           </div>
         )}
-        {(errors.title || errors.date) && (
+        {(errors.title || errors.dueDate) && (
           <div role="alert" className="alert alert-error p-2 mt-1 text-xs">
             <span>Error! Please enter a task and date</span>
           </div>
@@ -88,8 +89,8 @@ const TodoForm = () => {
           />
           <input
             type="date"
-            name="date"
-            value={todo.date}
+            name="dueDate"
+            value={todo.dueDate}
             onChange={handleChange}
             className="input input-bordered input-md w-full max-w-xs text-slate-400"
           />
