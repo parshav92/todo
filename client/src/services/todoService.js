@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const http = axios.create({
@@ -22,8 +22,8 @@ export const createTodo = async (todo) => {
     const response = await http.post("/todos", todo);
     return response.data;
   } catch (error) {
-    console.log("Error creating todos", error);
-    toast.error(error.resposne.data.error, { autoClose: 1000 });
+    console.log("Error creating todo", error);
+    toast.error(error.response.data.error, { autoClose: 1000 });
     throw error;
   }
 };
@@ -33,15 +33,15 @@ export const patchTodo = async (id, todo) => {
     const response = await http.patch(`/todos/${id}`, todo);
     return response.data;
   } catch (error) {
-    console.log("Error upating todos", error);
-    toast.error(error.resposne.data.error, { autoClose: 1000 });
+    console.log("Error updating todo", error);
+    toast.error(error.response.data.error, { autoClose: 1000 });
     throw error;
   }
 };
 
-export const deleteTodo = async (id, todo) => {
+export const deleteTodo = async (id) => {
   try {
-    await http.delete(`/todos/${id}`, todo);
+    await http.delete(`/todos/${id}`);
   } catch (error) {
     console.log("Error deleting todo", error);
     throw error;

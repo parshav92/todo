@@ -43,8 +43,7 @@ exports.patchTodo = async (req, res) => {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
       { title, description, dueDate, completed },
-
-      { new: true, useFindAndModify: false }
+      { new: true, useFindAndModify: true }
     );
     res.status(200).json(updatedTodo);
   } catch (error) {

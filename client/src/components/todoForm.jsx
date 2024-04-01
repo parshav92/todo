@@ -44,23 +44,24 @@ const TodoForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        const response = await createTodo(todo);
-
-        console.log(todo);
-        setSuccessMessage("Your Todo has been created");
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 2000);
-        setTodo({
-          title: "",
-          dueDate: "",
-          description: "",
-        });
-      } catch (err) {
-        console.error(err);
-      }
+    if (!validateForm()) return;
+    try {
+      await createTodo({
+        title: todo.title,
+        description: todo.description,
+        dueDate: todo.dueDate,
+      });
+      setSuccessMessage("Task added successfully");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 2000);
+      setTodo({
+        title: "",
+        description: "",
+        dueDate: "",
+      });
+    } catch (error) {
+      console.error("Error creating todo", error);
     }
   };
 

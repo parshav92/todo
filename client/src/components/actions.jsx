@@ -1,9 +1,10 @@
 import React from "react";
 
-const Actions = () => {
+const Actions = ({ onDelete, onUpdate, onComplete }) => {
   return (
     <td className="flex flex-row">
-      <button className="btn btn-xs btn-warning m-1">
+      {/* edit todo*/}
+      <button className="btn btn-xs btn-warning mx-0.5">
         <svg
           className="h-4 w-4 text-slate-600"
           width="24"
@@ -21,7 +22,8 @@ const Actions = () => {
           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
         </svg>
       </button>
-      <button className="btn btn-xs btn-success m-1">
+      {/* completed todo */}
+      <button className="btn btn-xs btn-success mx-0.5" onClick={onComplete}>
         <svg
           className="h-4 w-4 text-slate-600"
           width="24"
@@ -37,7 +39,8 @@ const Actions = () => {
           <path stroke="none" d="M0 0h24v24H0z" /> <path d="M5 12l5 5l10 -10" />
         </svg>
       </button>
-      <button className="btn btn-xs btn-error m-1">
+      {/* delete todo */}
+      <button className="btn btn-xs btn-error mx-0.5" onClick={onDelete}>
         <svg
           className="h-4 w-4 text-slate-600"
           width="24"

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Actions from "./actions";
 import Pagination from "./common/pagination";
-import { getTodos } from "../services/todoService";
+import { getTodos, deleteTodo, patchTodo } from "../services/todoService";
 import { toast } from "react-toastify";
 
 const TodoTable = () => {
   const itemsPerPage = 3;
   const [currentPage, setCurrentPage] = useState(1);
-  const [sampleTodos, setSampleTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const todos = await getTodos();
-        setSampleTodos(todos);
+        const todosData = await getTodos();
+        setTodos(todosData);
       } catch (error) {
         console.error("Error fetching todos:", error);
       }
@@ -21,17 +21,49 @@ const TodoTable = () => {
     fetchData();
   }, []);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOdFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sampleTodos.slice(indexOdFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = useCallback((pageNumber) => setCurrentPage(pageNumber), []);
 
   const handleDelete = async (id) => {
-    // await deleteTodo()
+    try {
+      await deleteTodo(id);
+      setTodos(todos.filter((todo) => todo._id !== id));
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("This todo has already been deleted");
+      } else {
+        console.error("Error deleting todo:", error);
+      }
+    }
   };
 
-  const handleUpdate = async (id) => {};
+  const handleCompleted = async (id) => {
+    try {
+      const todoIndex = todos.findIndex((todo) => todo._id === id);
+      if (todoIndex === -1) throw new Error("Todo not found");
+
+      const updatedTodos = [...todos];
+      updatedTodos[todoIndex].completed = !updatedTodos[todoIndex].completed;
+
+      setTodos(updatedTodos);
+
+      await patchTodo(id, { completed: updatedTodos[todoIndex].completed });
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("This todo has already been deleted");
+      } else {
+        console.error("Error toggling todo completion:", error);
+      }
+    }
+  };
+
+  const formatDueDate = (utcDateString) => {
+    const date = new Date(utcDateString);
+    return date.toLocaleDateString();
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOdFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = todos.slice(indexOdFirstItem, indexOfLastItem);
 
   return (
     <div className="rounded overflow-x-auto text-sm">
@@ -55,15 +87,12 @@ const TodoTable = () => {
             currentItems.map((item) => (
               <tr key={item._id}>
                 <td>{item.title}</td>
-                <td>{item.dueDate}</td>
+                <td>{formatDueDate(item.dueDate)}</td>
                 <td>{item.completed ? "Completed" : "Pending"}</td>
-
                 <td>
                   <Actions
                     onDelete={() => handleDelete(item._id)}
-                    onUpdate={(updatedTodo) =>
-                      handleUpdate(item._id, updatedTodo)
-                    }
+                    onComplete={() => handleCompleted(item._id)}
                   />
                 </td>
               </tr>
@@ -72,7 +101,7 @@ const TodoTable = () => {
         </tbody>
       </table>
       <Pagination
-        itemsCount={sampleTodos.length}
+        itemsCount={todos.length}
         pageSize={itemsPerPage}
         currentPage={currentPage}
         onPageChange={paginate}
@@ -80,4 +109,5 @@ const TodoTable = () => {
     </div>
   );
 };
+
 export default TodoTable;
