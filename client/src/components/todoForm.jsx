@@ -1,74 +1,10 @@
-import React, { useState } from "react";
-import Joi from "joi";
-import { createTodo } from "../services/todoService";
+import React from "react";
 
-const TodoForm = () => {
-  const [todo, setTodo] = useState({
-    title: "",
-    description: "",
-    dueDate: "",
-  });
-  const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTodo({
-      ...todo,
-      [name]: value,
-    });
-  };
-
-  const schema = Joi.object({
-    title: Joi.string().required().label("Title"),
-    dueDate: Joi.date().iso().required().label("Date"),
-    description: Joi.string().allow("").label("Description"),
-  });
-
-  const validateForm = () => {
-    const { error } = schema.validate(todo, { abortEarly: false });
-    if (error) {
-      const newErrors = {};
-      error.details.forEach((detail) => {
-        newErrors[detail.context.key] = detail.message;
-      });
-      setErrors(newErrors);
-      setTimeout(() => {
-        setErrors({});
-      }, 2000);
-      return false;
-    }
-    setErrors({});
-    return true;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    try {
-      await createTodo({
-        title: todo.title,
-        description: todo.description,
-        dueDate: todo.dueDate,
-      });
-      setSuccessMessage("Task added successfully");
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 2000);
-      setTodo({
-        title: "",
-        description: "",
-        dueDate: "",
-      });
-    } catch (error) {
-      console.error("Error creating todo", error);
-    }
-  };
-
+const TodoForm = ({ todo, onChange, onSubmit, successMessage, errors }) => {
   return (
     <div className="container mx-auto">
       <h1 className="text-center align-middle text-2xl font-bold">Todo List</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         {successMessage && (
           <div role="alert" className="alert alert-success p-2 mt-1 text-xs">
             <span>{successMessage}</span>
@@ -84,7 +20,7 @@ const TodoForm = () => {
             type="text"
             name="title"
             value={todo.title}
-            onChange={handleChange}
+            onChange={onChange}
             placeholder="Type here"
             className="input input-md input-bordered w-full max-w-xs"
           />
@@ -92,7 +28,7 @@ const TodoForm = () => {
             type="date"
             name="dueDate"
             value={todo.dueDate}
-            onChange={handleChange}
+            onChange={onChange}
             className="input input-bordered input-md w-full max-w-xs text-slate-400"
           />
           <button type="submit" className="btn btn-circle btn-secondary btn-s">
@@ -102,7 +38,7 @@ const TodoForm = () => {
         <textarea
           name="description"
           value={todo.description}
-          onChange={handleChange}
+          onChange={onChange}
           className="textarea w-full textarea-bordered textarea-sm"
           placeholder="Description"
         ></textarea>

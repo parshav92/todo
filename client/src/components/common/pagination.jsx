@@ -12,7 +12,7 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
       {pages.map((page) => (
         <input
           key={page}
-          className="join-item btn btn-square btn-ghost btn-xs"
+          className="join-item  btn btn-square btn-ghost btn-xs"
           type="radio"
           name="options"
           aria-label={page}
