@@ -1,10 +1,10 @@
 import React from "react";
 
-const Actions = ({ onDelete, onUpdate, onComplete }) => {
+const Actions = ({ onDelete, onEdit, onComplete }) => {
   return (
     <td className="flex flex-row">
       {/* edit todo*/}
-      <button className="btn btn-xs btn-warning mx-0.5">
+      <button className="btn btn-xs btn-warning mx-0.5" onClick={onEdit}>
         <svg
           className="h-4 w-4 text-slate-600"
           width="24"

@@ -7,6 +7,7 @@ const TodoTable = ({
   todos,
   onComplete,
   onDelete,
+  onEdit,
   currentItems,
   onPageChange,
   itemsPerPage,
@@ -44,6 +45,7 @@ const TodoTable = ({
                   <Actions
                     onDelete={() => onDelete(item._id)}
                     onComplete={() => onComplete(item._id)}
+                    onEdit={() => onEdit(item._id)}
                   />
                 </td>
               </tr>

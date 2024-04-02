@@ -20,7 +20,8 @@ const TodoContainer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [todos, setTodos] = useState([]);
   const itemsPerPage = 3;
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingTodoId, setEditingTodoId] = useState(null);
   useEffect(() => {
     fetchData();
   }, []);
@@ -47,12 +48,27 @@ const TodoContainer = () => {
     if (!validateForm(todo, setErrors)) return;
 
     try {
-      await createTodo({
-        title: todo.title,
-        description: todo.description,
-        dueDate: todo.dueDate,
-      });
-      setSuccessMessage("Task added successfully");
+      if (isEditing) {
+        await patchTodo(editingTodoId, {
+          title: todo.title,
+          description: todo.description,
+          dueDate: todo.dueDate,
+        });
+        toast.success("Todo updated successfully");
+        fetchData();
+      } else {
+        // If not editing, send POST request to create new todo
+        await createTodo({
+          title: todo.title,
+          description: todo.description,
+          dueDate: todo.dueDate,
+        });
+        toast.success("Todo added successfully");
+        fetchData();
+      }
+      setSuccessMessage(
+        isEditing ? "Todo updated successfully" : "Todo added successfully"
+      );
       setTimeout(() => {
         setSuccessMessage("");
       }, 2000);
@@ -61,8 +77,11 @@ const TodoContainer = () => {
         description: "",
         dueDate: "",
       });
+      setIsEditing(false);
+      setEditingTodoId(null);
     } catch (error) {
-      console.error("Error creating todo", error);
+      console.error("Error:", error);
+      toast.error("Error occurred. Please try again.");
     }
   };
 
@@ -105,7 +124,17 @@ const TodoContainer = () => {
     }
   };
 
-  //   Other functions for pagination, etc.
+  const handleEdit = (id) => {
+    const todoToEdit = todos.find((todo) => todo._id === id);
+    setTodo({
+      title: todoToEdit.title,
+      description: todoToEdit.description,
+      dueDate: todoToEdit.dueDate,
+    });
+    setIsEditing(true);
+    setEditingTodoId(id);
+  };
+
   const handlePageChange = useCallback(
     (page) => {
       setCurrentPage(page);
@@ -118,28 +147,24 @@ const TodoContainer = () => {
   const currentItems = todos.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="font-sans min-h-screen flex flex-col items-center justify-center bg-opacity-15 backdrop-blur-md mx-4">
-      <div
-        className="bg-opacity-50 rounded-lg p-4 w-full max-w-lg"
-        style={{ boxShadow: "0 0 16px 0 rgba(31, 38, 135, 0.3)" }}
-      >
-        <TodoForm
-          todo={todo}
-          errors={errors}
-          successMessage={successMessage}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-        />
-        <TodoTable
-          currentPage={currentPage}
-          todos={todos}
-          onDelete={handleDelete}
-          onComplete={handleCompleted}
-          currentItems={currentItems}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </div>
+    <>
+      <TodoForm
+        todo={todo}
+        errors={errors}
+        successMessage={successMessage}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
+      <TodoTable
+        currentPage={currentPage}
+        todos={todos}
+        onDelete={handleDelete}
+        onComplete={handleCompleted}
+        currentItems={currentItems}
+        onPageChange={handlePageChange}
+        onEdit={handleEdit}
+      />
+    </>
   );
 };
 
