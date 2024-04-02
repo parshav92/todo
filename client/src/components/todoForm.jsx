@@ -31,17 +31,19 @@ const TodoForm = ({ todo, onChange, onSubmit, successMessage, errors }) => {
             onChange={onChange}
             className="input input-bordered input-md w-full max-w-xs text-slate-400"
           />
-          <button type="submit" className="btn btn-circle btn-secondary btn-s">
+        </div>
+        <div className="flex">
+          <textarea
+            name="description"
+            value={todo.description}
+            onChange={onChange}
+            className="textarea w-full textarea-bordered mb-2 mr-2"
+            placeholder="Description"
+          ></textarea>
+          <button type="submit" className="btn my-3 btn-primary text-2xl ">
             +
           </button>
         </div>
-        <textarea
-          name="description"
-          value={todo.description}
-          onChange={onChange}
-          className="textarea w-full textarea-bordered textarea-sm"
-          placeholder="Description"
-        ></textarea>
       </form>
     </div>
   );

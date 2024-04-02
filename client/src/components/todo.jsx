@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import TodoForm from "./todoForm";
 import TodoTable from "./todoTable";
-import { validateForm } from "../validators/validation";
+import { validateForm } from "../utils/validation";
 import {
   getTodos,
   deleteTodo,
