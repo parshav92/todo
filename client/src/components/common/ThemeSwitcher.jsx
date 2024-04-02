@@ -3,7 +3,7 @@ import React from "react";
 const ThemeSwitcher = () => {
   return (
     <div className="dropdown mb-48 dropdown-hover">
-      <div tabIndex={0} role="button" className="btn">
+      <div tabIndex={0} role="button" className="btn-xs">
         Theme
         <svg
           width="12px"
@@ -17,22 +17,13 @@ const ThemeSwitcher = () => {
       </div>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-32"
+        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-24"
       >
         <li>
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Default"
-            value="default"
-          />
-        </li>
-        <li>
-          <input
-            type="radio"
-            name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            className="theme-controller btn btn-xs btn-block btn-ghost justify-start"
             aria-label="Retro"
             value="retro"
           />
@@ -41,7 +32,16 @@ const ThemeSwitcher = () => {
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            className="theme-controller btn btn-xs btn-block btn-ghost justify-start"
+            aria-label="Lemonade"
+            value="lemonade"
+          />
+        </li>
+        <li>
+          <input
+            type="radio"
+            name="theme-dropdown"
+            className="theme-controller btn btn-xs btn-block btn-ghost justify-start"
             aria-label="Cyberpunk"
             value="cyberpunk"
           />
@@ -50,7 +50,7 @@ const ThemeSwitcher = () => {
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+            className="theme-controller btn btn-xs btn-block btn-ghost justify-start"
             aria-label="Valentine"
             value="valentine"
           />
@@ -59,9 +59,9 @@ const ThemeSwitcher = () => {
           <input
             type="radio"
             name="theme-dropdown"
-            className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-            aria-label="Aqua"
-            value="aqua"
+            className="theme-controller btn btn-xs btn-block btn-ghost justify-start"
+            aria-label="Dark"
+            value="sunset"
           />
         </li>
       </ul>

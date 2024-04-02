@@ -12,7 +12,7 @@ function App() {
       >
         <TodoContainer />
       </div>
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-5">
         <ThemeSwitcher />
       </div>
       <Footer />
