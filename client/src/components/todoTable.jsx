@@ -53,12 +53,6 @@ const TodoTable = ({
           )}
         </tbody>
       </table>
-      <Pagination
-        itemsCount={todos.length}
-        pageSize={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={onPageChange}
-      />
     </div>
   );
 };

@@ -23,4 +23,4 @@ export function usePagination(items, itemsPerPage) {
   };
 }
 
-// export default usePagination;
+export default usePagination;

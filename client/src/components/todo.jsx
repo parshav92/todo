@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import TodoForm from "./todoForm";
 import TodoTable from "./todoTable";
 import { validateForm } from "../utils/validation";
+import Pagination from "./common/pagination";
 import {
   getTodos,
   deleteTodo,
@@ -163,6 +164,12 @@ const TodoContainer = () => {
         currentItems={currentItems}
         onPageChange={handlePageChange}
         onEdit={handleEdit}
+      />
+      <Pagination
+        itemsCount={todos.length}
+        pageSize={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
       />
     </>
   );
