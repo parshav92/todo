@@ -157,12 +157,10 @@ const TodoContainer = () => {
         onSubmit={handleSubmit}
       />
       <TodoTable
-        currentPage={currentPage}
         todos={todos}
         onDelete={handleDelete}
         onComplete={handleCompleted}
         currentItems={currentItems}
-        onPageChange={handlePageChange}
         onEdit={handleEdit}
       />
       <Pagination

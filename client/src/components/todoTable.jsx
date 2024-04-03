@@ -1,17 +1,7 @@
 import React from "react";
 import Actions from "./actions";
-import Pagination from "./common/pagination";
 
-const TodoTable = ({
-  currentPage,
-  todos,
-  onComplete,
-  onDelete,
-  onEdit,
-  currentItems,
-  onPageChange,
-  itemsPerPage,
-}) => {
+const TodoTable = ({ onComplete, onDelete, onEdit, currentItems }) => {
   const formatDueDate = (utcDateString) => {
     const date = new Date(utcDateString);
     return date.toLocaleDateString();
