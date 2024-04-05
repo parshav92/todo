@@ -23,6 +23,7 @@ const TodoContainer = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [todos, setTodos] = useState([]);
+  const [filteredTodos, setFilteredTodos] = useState([]);
   const itemsPerPage = 3;
   const [isEditing, setIsEditing] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
@@ -34,6 +35,7 @@ const TodoContainer = () => {
     try {
       const todosData = await getTodos();
       setTodos(todosData);
+      setFilteredTodos(todosData); // Initially, set filteredTodos to all todos
     } catch (error) {
       console.error("Error fetching todos:", error);
     }
@@ -92,7 +94,7 @@ const TodoContainer = () => {
   const handleDelete = async (id) => {
     try {
       await deleteTodo(id);
-      const updatedTodos = todos.filter((todo) => todo._id !== id);
+      const updatedTodos = filteredTodos.filter((todo) => todo._id !== id);
       setTodos(updatedTodos);
 
       const totalPages = Math.ceil(updatedTodos.length / itemsPerPage);
@@ -113,13 +115,26 @@ const TodoContainer = () => {
       await deleteAllTodos();
       setTodos([]);
       setCurrentPage(1);
+      fetchData();
     } catch (error) {
       console.error("Error deleting all todos:", error);
     }
   };
 
-  const handleFilter = () => {
-    console.log("Filtering todos");
+  const handleFilter = (e) => {
+    const status = e.target.textContent.toLowerCase();
+    if (status === "all") {
+      setFilteredTodos(todos); // Show all todos
+    } else if (status === "completed" || status === "pending") {
+      const filteredTodos = todos.filter(
+        (todo) =>
+          (status === "completed" && todo.completed) ||
+          (status === "pending" && !todo.completed)
+      );
+      setFilteredTodos(filteredTodos);
+    } else {
+      console.error("Unknown filter status:", status);
+    }
   };
   const handleCompleted = async (id) => {
     try {
@@ -161,7 +176,7 @@ const TodoContainer = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = todos.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredTodos.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
