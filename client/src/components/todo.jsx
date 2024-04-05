@@ -8,8 +8,11 @@ import {
   deleteTodo,
   patchTodo,
   createTodo,
+  deleteAllTodos,
 } from "../services/todoService";
 import { toast } from "react-toastify";
+import DeleteAll from "./deleteAll";
+import Filter from "./filter";
 const TodoContainer = () => {
   const [todo, setTodo] = useState({
     title: "",
@@ -105,6 +108,19 @@ const TodoContainer = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    try {
+      await deleteAllTodos();
+      setTodos([]);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error("Error deleting all todos:", error);
+    }
+  };
+
+  const handleFilter = () => {
+    console.log("Filtering todos");
+  };
   const handleCompleted = async (id) => {
     try {
       const todoIndex = todos.findIndex((todo) => todo._id === id);
@@ -156,6 +172,10 @@ const TodoContainer = () => {
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
+      <div className="flex justify-between">
+        <Filter onFilter={handleFilter} />
+        <DeleteAll ondeleteAll={handleDeleteAll} />
+      </div>
       <TodoTable
         todos={todos}
         onDelete={handleDelete}
