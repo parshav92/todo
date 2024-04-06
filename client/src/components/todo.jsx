@@ -27,19 +27,24 @@ const TodoContainer = () => {
   const itemsPerPage = 3;
   const [isEditing, setIsEditing] = useState(false);
   const [editingTodoId, setEditingTodoId] = useState(null);
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const todosData = await getTodos();
       setTodos(todosData);
-      setFilteredTodos(todosData); // Initially, set filteredTodos to all todos
+      setFilteredTodos(todosData);
     } catch (error) {
       console.error("Error fetching todos:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,28 +54,68 @@ const TodoContainer = () => {
     });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      await deleteTodo(id);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+      setFilteredTodos((prevFilteredTodos) =>
+        prevFilteredTodos.filter((todo) => todo._id !== id)
+      );
+      const updatedTodosLength = filteredTodos.length - 1;
+      const totalPages = Math.ceil(updatedTodosLength / itemsPerPage);
+      if (currentPage > totalPages) {
+        setCurrentPage(totalPages);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        toast.error("This todo has already been deleted");
+      } else {
+        console.error("Error deleting todo:", error);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm(todo, setErrors)) return;
 
     try {
+      setIsLoading(true);
       if (isEditing) {
-        await patchTodo(editingTodoId, {
+        const updatedTodo = {
           title: todo.title,
           description: todo.description,
           dueDate: todo.dueDate,
-        });
+        };
+        await patchTodo(editingTodoId, updatedTodo);
+
+        // Update the todo and filteredTodos states immediately
+        setTodos((prevTodos) =>
+          prevTodos.map((t) =>
+            t._id === editingTodoId ? { ...t, ...updatedTodo } : t
+          )
+        );
+        setFilteredTodos((prevFilteredTodos) =>
+          prevFilteredTodos.map((t) =>
+            t._id === editingTodoId ? { ...t, ...updatedTodo } : t
+          )
+        );
+
         toast.success("Todo updated successfully");
-        fetchData();
       } else {
-        // If not editing, send POST request to create new todo
-        await createTodo({
+        const newTodo = await createTodo({
           title: todo.title,
           description: todo.description,
           dueDate: todo.dueDate,
         });
+        setTodos((prevTodos) => [...prevTodos, newTodo]);
+        setFilteredTodos((prevFilteredTodos) => [
+          ...prevFilteredTodos,
+          newTodo,
+        ]);
         toast.success("Todo added successfully");
-        fetchData();
       }
       setSuccessMessage(
         isEditing ? "Todo updated successfully" : "Todo added successfully"
@@ -88,25 +133,8 @@ const TodoContainer = () => {
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error occurred. Please try again.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteTodo(id);
-      const updatedTodos = filteredTodos.filter((todo) => todo._id !== id);
-      setTodos(updatedTodos);
-
-      const totalPages = Math.ceil(updatedTodos.length / itemsPerPage);
-      if (currentPage > totalPages) {
-        setCurrentPage(totalPages);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        toast.error("This todo has already been deleted");
-      } else {
-        console.error("Error deleting todo:", error);
-      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,7 +152,7 @@ const TodoContainer = () => {
   const handleFilter = (e) => {
     const status = e.target.textContent.toLowerCase();
     if (status === "all") {
-      setFilteredTodos(todos); // Show all todos
+      setFilteredTodos(todos);
     } else if (status === "completed" || status === "pending") {
       const filteredTodos = todos.filter(
         (todo) =>
@@ -135,18 +163,30 @@ const TodoContainer = () => {
     } else {
       console.error("Unknown filter status:", status);
     }
+    setCurrentPage(1);
   };
   const handleCompleted = async (id) => {
     try {
-      const todoIndex = todos.findIndex((todo) => todo._id === id);
+      const todoIndex = filteredTodos.findIndex((todo) => todo._id === id);
       if (todoIndex === -1) throw new Error("Todo not found");
 
-      const updatedTodos = [...todos];
-      updatedTodos[todoIndex].completed = !updatedTodos[todoIndex].completed;
+      const updatedFilteredTodos = [...filteredTodos];
+      updatedFilteredTodos[todoIndex].completed =
+        !updatedFilteredTodos[todoIndex].completed;
 
-      setTodos(updatedTodos);
+      setFilteredTodos(updatedFilteredTodos);
 
-      await patchTodo(id, { completed: updatedTodos[todoIndex].completed });
+      const todoInTodos = todos.find((todo) => todo._id === id);
+      if (todoInTodos) {
+        todoInTodos.completed = updatedFilteredTodos[todoIndex].completed;
+        setTodos((prevTodos) =>
+          prevTodos.map((t) => (t._id === id ? todoInTodos : t))
+        );
+      }
+
+      await patchTodo(id, {
+        completed: updatedFilteredTodos[todoIndex].completed,
+      });
     } catch (error) {
       if (error.response && error.response.status === 404) {
         toast.error("This todo has already been deleted");
@@ -192,18 +232,19 @@ const TodoContainer = () => {
         <DeleteAll ondeleteAll={handleDeleteAll} />
       </div>
       <TodoTable
-        todos={todos}
+        todos={filteredTodos}
         onDelete={handleDelete}
         onComplete={handleCompleted}
         currentItems={currentItems}
         onEdit={handleEdit}
       />
       <Pagination
-        itemsCount={todos.length}
+        itemsCount={filteredTodos.length}
         pageSize={itemsPerPage}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+      {isLoading && <div>Loading...</div>}
     </>
   );
 };
